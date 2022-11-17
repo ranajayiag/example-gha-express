@@ -5,8 +5,8 @@ const getEnv = (name, defaultValue) => process.env[name] || defaultValue;
 const appEnvs = {
   APP_NAME: getEnv('APP_NAME'),
   APP_VERSION: getEnv('APP_VERSION'),
-  BUILD_KEY: getEnv('BUILD_KEY'),
-  SECRET_KEY: getEnv('SECRET_KEY'),
+  APP_BUILD_KEY: getEnv('APP_BUILD_KEY'),
+  APP_SECRET_KEY: getEnv('APP_SECRET_KEY'),
   AWS_LAMBDA_NAME: getEnv('AWS_LAMBDA_NAME')
 };
 
