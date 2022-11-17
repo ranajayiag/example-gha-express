@@ -12,14 +12,12 @@ const appEnvs = {
 
 const swaggerSpec = swaggerJsdoc({
   failOnErrors: true,
-  definition: {
+  swaggerDefinition: {
     openapi: '3.0.0',
     info: {
       title: appEnvs.APP_NAME,
       version: appEnvs.APP_VERSION,
-    }
-  },
-  swaggerDefinition: {
+    },
     basePath: getEnv('NODE_ENV') === 'development'
       ? '/'
       // Workaround required for API gateway as stage is in the URL
