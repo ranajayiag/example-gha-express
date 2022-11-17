@@ -2,32 +2,17 @@ require('dotenv').config();
 
 const express = require('express');
 const serverless = require('serverless-http');
-
-const getEnv = (name, defaultValue) => process.env[name] || defaultValue;
-
-const appEnvs = {
-  APP_NAME: getEnv('APP_NAME'),
-  APP_VERSION: getEnv('APP_VERSION'),
-  BUILD_KEY: getEnv('BUILD_KEY'),
-  SECRET_KEY: getEnv('SECRET_KEY'),
-  AWS_LAMBDA_NAME: getEnv('AWS_LAMBDA_NAME')
-};
+const swaggerUi = require('swagger-ui-express');
+const { getEnv, swaggerSpec } = require('./src/config');
+const { router } = require('./src/routes');
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get('/api', (req, res) => {
-  res.json({
-    status: 'OK',
-    appEnvs
-  });
-});
-
-app.post('/api', (req, res) => {
-  res.json({ ...req.body });
-});
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/', router);
 
 if (getEnv('NODE_ENV') === 'development') {
   // Run the express API locally
