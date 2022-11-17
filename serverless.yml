@@ -16,6 +16,8 @@ provider:
   stage: dev
   memorySize: 128
   region: ${env:AWS_REGION}
+  environment:
+    NODE_ENV: production
 functions:
   app:
     handler: app/app.handler

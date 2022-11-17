@@ -10,6 +10,7 @@ Before setting up locally or deploying, run `cp .env.example .env` and populate 
 
 1. Run `npm i`
 2. Run `npm start` to start the express app locally for testing
+3. Open [http://localhost:3000/swagger](http://localhost:3000/swagger) to test endpoints
 
 ## Deployment
 
@@ -17,3 +18,5 @@ Before setting up locally or deploying, run `cp .env.example .env` and populate 
 
 1. Run `npm run deploy`
 2. Once complete, access the API on the API gateway URL printed in the console output
+
+> Don't forget to put /api or /swagger on the end of the URL

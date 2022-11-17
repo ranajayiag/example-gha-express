@@ -17,7 +17,13 @@ const swaggerSpec = swaggerJsdoc({
     info: {
       title: appEnvs.APP_NAME,
       version: appEnvs.APP_VERSION,
-    },
+    }
+  },
+  swaggerDefinition: {
+    basePath: getEnv('NODE_ENV') === 'development'
+      ? '/'
+      // Workaround required for API gateway as stage is in the URL
+      : `/${getEnv('AWS_LAMBDA_STAGE')}`
   },
   apis: ['src/routes.js']
 });
