@@ -1,4 +1,4 @@
-name: Deployment workflow
+name: Jay Deployment workflow
 
 # Only run this workflow when opening a pull request or when pushing to the main branch
 on:
