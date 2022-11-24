@@ -7,6 +7,11 @@ on:
     branches:
       - main
 
+# Local env variables (include this before "jobs")
+env:
+  APP_NAME: Wonderful app
+  APP_VERSION: 1.0.0
+
 jobs:
   # A job can contain multiple steps
   deploy:
@@ -25,3 +30,19 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+ 
+      - name: Print envs
+        # These envs are only exposed in this step
+        env:
+          APP_BUILD_KEY: abc-12345
+          # Envs can be mapped to secrets to make the value available to commands in the step.
+          APP_SECRET_KEY: ${{ secrets.APP_SECRET_KEY }}
+        run: |
+          echo "You can see regular env vars in GH Actions logs..."
+          echo "APP_NAME is: $APP_NAME"
+          echo "APP_VERSION is: $APP_VERSION"
+          echo "APP_BUILD_KEY is: $APP_BUILD_KEY"
+          echo ""
+          
+          echo "...but secrets like these won't be visible!"
+          echo "APP_SECRET_KEY is: $APP_SECRET_KEY"
