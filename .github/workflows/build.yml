@@ -38,7 +38,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-         
       - name: Print envs
         # These envs are only exposed in this step
         env:
