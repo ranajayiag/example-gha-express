@@ -7,6 +7,11 @@ on:
     branches:
       - main
 
+# Local env variables (include this before "jobs")
+env:
+  APP_NAME: Wonderful app
+  APP_VERSION: 1.0.0
+
 jobs:
   # A job can contain multiple steps
   deploy:
@@ -18,6 +23,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      # Add this step after the Checkout step:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Set Node version
         uses: actions/setup-node@v3
         with:
@@ -25,3 +38,36 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+ 
+      - name: Print envs
+        # These envs are only exposed in this step
+        env:
+          APP_BUILD_KEY: abc-12345
+          # Envs can be mapped to secrets to make the value available to commands in the step.
+          APP_SECRET_KEY: ${{ secrets.APP_SECRET_KEY }}
+        run: |
+          echo "You can see regular env vars in GH Actions logs..."
+          echo "APP_NAME is: $APP_NAME"
+          echo "APP_VERSION is: $APP_VERSION"
+          echo "APP_BUILD_KEY is: $APP_BUILD_KEY"
+          echo ""
+          
+          echo "...but secrets like these won't be visible!"
+          echo "APP_SECRET_KEY is: $APP_SECRET_KEY"
+
+        # Add these 2 steps after the Print envs step:
+        - name: Write envfile
+          uses: SpicyPizza/create-envfile@v1.3
+          with:
+            envkey_APP_NAME: ${{ env.APP_NAME }}
+            envkey_APP_VERSION: ${{ env.APP_VERSION }}
+            envkey_APP_BUILD_KEY: abc-12345
+            envkey_APP_SECRET_KEY: ${{ secrets.APP_SECRET_KEY }}
+            envkey_AWS_LAMBDA_NAME: ${{ secrets.AWS_LAMBDA_NAME }}
+            envkey_AWS_LAMBDA_STAGE: ${{ secrets.AWS_LAMBDA_STAGE }}
+            directory: ./
+            file_name: .env
+            fail_on_empty: true
+        
+        - name: Deploy to Lambda
+          run: npm run deploy
