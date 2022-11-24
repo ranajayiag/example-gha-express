@@ -1,0 +1,27 @@
+name: Deployment workflow
+
+# Only run this workflow when opening a pull request or when pushing to the main branch
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  # A job can contain multiple steps
+  deploy:
+    # The OS to run these steps on
+    runs-on: ubuntu-latest
+
+    # The steps to be run in this job, in the order they should run in
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Node version
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install
